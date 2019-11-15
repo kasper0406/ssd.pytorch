@@ -103,8 +103,8 @@ class COCODetection(data.Dataset):
             tuple: Tuple (image, target).
                    target is the object returned by ``coco.loadAnns``.
         """
-        im, gt, h, w = self.pull_item(index)
-        return im, gt
+        img, target, h, w = self.pull_item(index)
+        return img, target
 
     def __len__(self):
         return len(self.ids)
