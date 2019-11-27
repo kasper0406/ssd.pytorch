@@ -174,7 +174,7 @@ def train():
         images, targets = next(batch_iterator)
 
         if args.cuda:
-            images = Variable(images.cuda())
+            images = Variable(images.cuda()).float()
             with torch.no_grad():
                 targets = [Variable(ann.cuda()) for ann in targets]
         else:

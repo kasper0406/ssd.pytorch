@@ -19,7 +19,7 @@ def bb_percent_to_pixel(frame, target):
     ymin = frame.shape[0] - int(ymin * frame.shape[0])
     ymax = frame.shape[0] - int(ymax * frame.shape[0])
     
-    return [ xmin, ymin, xmax, ymax, label_id ]
+    return [ xmin, ymin, xmax, ymax ]
     
 
 def transform_annotation(frame, targets):
@@ -77,22 +77,24 @@ if __name__ == '__main__':
     dataset = GFBDetection(GFB_ROOT)
     print("Number of samples: {}".format(len(dataset)))
 
-    frame_count = 10
-    frame = dataset.pull_image(frame_count).copy()
+    for frame_count in range(10, 100, 10):
+        print(frame_count)
+        frame = dataset.pull_image(frame_count).copy()
 
-    # Draw target bounding boxes
-    for target in transform_annotation(frame, dataset.pull_anno(frame_count)):
-        xmin, ymin, xmax, ymax, label = bb_percent_to_pixel(target)
+        # Draw target bounding boxes
+        for target in transform_annotation(frame, dataset.pull_anno(frame_count)):
+            xmin, ymin, xmax, ymax = bb_percent_to_pixel(frame, target)
+            _, _, _, _, label = target
 
-        color = (255, 255, 255)
-        if label == 0:
-            color = (0, 100, 255)
-        elif label == 1:
-            color = (255, 100, 0)
+            color = (255, 255, 255)
+            if label == 0:
+                color = (0, 100, 255)
+            elif label == 1:
+                color = (255, 100, 0)
         
-        cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), color, 3)
+            cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), color, 3)
     
-    cv2.imshow("frame", frame)
-    cv2.waitKey(0)
+        cv2.imshow("frame", frame)
+        cv2.waitKey(0)
     
     
